@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Forecast - Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Prompt'; background: #020617; color: white; background-image: url('https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?q=80'); background-size: cover; background-attachment: fixed; }
+        .glass { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); transition: 0.4s; }
+        .glass:hover { transform: translateY(-5px); border-color: rgba(59, 130, 246, 0.5); }
+        nav { animation: fadeInDown 0.6s ease-out; }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="min-h-screen">
+    <nav class="glass sticky top-0 z-[1001] flex justify-between items-center px-10 py-5">
+        <div class="text-2xl font-bold italic text-blue-400">Weather Forecast</div>
+        <div class="hidden md:flex space-x-8 items-center" id="navbar-links">
+            <a href="index.html" class="hover:text-blue-400 transition">Homepage</a>
+            <a href="guide.html" class="text-blue-400 border-b-2 border-blue-400 pb-1">Guide</a>
+            <a href="map.html" class="hover:text-blue-400 transition">Map</a>
+            <a href="signin.html" class="hover:text-blue-400 transition" id="login-nav-link">Sign in</a>
+            <a href="about.html" class="hover:text-blue-400 transition">About me</a>
+        </div>
+    </nav>
+    <div class="container mx-auto mt-20 p-12 glass rounded-[3rem] max-w-4xl shadow-2xl">
+        <h1 class="text-6xl font-bold italic mb-10 text-center tracking-tighter">Guide</h1>
+        <div class="grid md:grid-cols-2 gap-10 text-xl px-4">
+            <div class="space-y-4">
+                <p class="flex items-center gap-3"><i class="fas fa-search text-blue-400"></i> ค้นหาเมืองผ่านแถบ Search</p>
+                <p class="flex items-center gap-3"><i class="fas fa-crosshairs text-blue-400"></i> กดไอคอนเป้าเล็งเพื่อดูพิกัดปัจจุบัน</p>
+            </div>
+            <div class="space-y-4">
+                <p class="flex items-center gap-3"><i class="fas fa-map text-blue-400"></i> เลือกเลเยอร์ ฝน/เมฆ/อุณหภูมิ</p>
+                <p class="flex items-center gap-3"><i class="fas fa-robot text-blue-400"></i> ปรึกษา ChatBot AI เรื่องการแต่งกาย</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.onload = function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userName = localStorage.getItem('userName');
+            const navMenu = document.getElementById('navbar-links');
+            const signInLink = document.getElementById('login-nav-link');
+            if (isLoggedIn === 'true' && signInLink) {
+                signInLink.innerHTML = `<i class="fas fa-user-circle mr-1"></i>${userName}`;
+                signInLink.href = "#"; signInLink.style.color = "#60a5fa";
+                const logoutBtn = document.createElement('a');
+                logoutBtn.innerHTML = `Logout`;
+                logoutBtn.className = "hover:text-red-400 cursor-pointer transition text-[10px] opacity-60 ml-4";
+                logoutBtn.onclick = function() { localStorage.clear(); window.location.href="index.html"; };
+                navMenu.appendChild(logoutBtn);
+            }
+        };
+    </script>
+</body>
+</html>

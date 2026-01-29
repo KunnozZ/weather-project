@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>About Me - Weather Forecast</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Prompt'; background: #0f172a; color: white; background-image: url('https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?q=80'); background-size: cover; background-attachment: fixed; }
+        .glass { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        .contact-card { transition: 0.3s; cursor: pointer; border-radius: 20px; }
+        .contact-card:hover { transform: scale(1.05) translateX(10px); background: rgba(59, 130, 246, 0.2); }
+    </style>
+</head>
+<body class="min-h-screen">
+    <nav class="glass sticky top-0 z-[1001] flex justify-between items-center px-10 py-5">
+        <div class="text-2xl font-bold italic text-blue-400">Weather Forecast</div>
+        <div class="hidden md:flex space-x-8 items-center" id="navbar-links">
+            <a href="index.html" class="hover:text-blue-400 transition">Homepage</a>
+            <a href="guide.html" class="hover:text-blue-400 transition">Guide</a>
+            <a href="map.html" class="hover:text-blue-400 transition">Map</a>
+            <a href="signin.html" class="hover:text-blue-400 transition" id="login-nav-link">Sign in</a>
+            <a href="about.html" class="text-blue-400 border-b-2 border-blue-400 pb-1">About me</a>
+        </div>
+    </nav>
+    <div class="container mx-auto mt-20 text-center px-4">
+        <h1 class="text-7xl font-bold italic mb-16 tracking-tighter">Contact</h1>
+        <div class="inline-block glass p-10 md:p-14 rounded-[3rem] text-left space-y-6 shadow-2xl border-white/5">
+            <a href="https://www.facebook.com/share/1DjrNGtyx5/" target="_blank" class="contact-card flex items-center gap-6 p-4">
+                <i class="fab fa-facebook text-5xl text-blue-500"></i>
+                <span class="text-2xl font-semibold">Neno Pannaton</span>
+            </a>
+            <a href="https://www.instagram.com/kunno_pnt?igsh=MWc4Y2lzYnhnd291ag==" target="_blank" class="contact-card flex items-center gap-6 p-4">
+                <i class="fab fa-instagram text-5xl text-pink-500"></i>
+                <span class="text-2xl font-semibold">kunno_pnt</span>
+            </a>
+            <a href="https://line.me/ti/p/~gkntvyt" target="_blank" class="contact-card flex items-center gap-6 p-4">
+                <i class="fab fa-line text-5xl text-green-500"></i>
+                <span class="text-2xl font-semibold">Kunno</span>
+            </a>
+            <a href="mailto:pannaton9543@gmail.com" class="contact-card flex items-center gap-6 p-4">
+                <i class="fas fa-envelope text-5xl text-red-500"></i>
+                <span class="text-xl md:text-2xl font-semibold">pannaton9543@gmail.com</span>
+            </a>
+        </div>
+    </div>
+    <script>
+        window.onload = function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userName = localStorage.getItem('userName');
+            const navMenu = document.getElementById('navbar-links');
+            const signInLink = document.getElementById('login-nav-link');
+            if (isLoggedIn === 'true' && signInLink) {
+                signInLink.innerHTML = `<i class="fas fa-user-circle mr-1"></i>${userName}`;
+                signInLink.href = "#"; signInLink.style.color = "#60a5fa";
+                const logoutBtn = document.createElement('a');
+                logoutBtn.innerHTML = `Logout`;
+                logoutBtn.className = "hover:text-red-400 cursor-pointer transition text-[10px] opacity-60 ml-4";
+                logoutBtn.onclick = function() { localStorage.clear(); window.location.href="index.html"; };
+                navMenu.appendChild(logoutBtn);
+            }
+        };
+    </script>
+</body>
+</html> 
