@@ -11,7 +11,7 @@
     <style>
         body { font-family: 'Prompt', sans-serif; background: #020617; color: white; margin: 0; overflow: hidden; }
         
-        /* Navbar สไตล์เดียวกับหน้าแรก */
+        /* Navbar สไตล์เดียวกับหน้าแรกเพื่อให้ดูต่อเนื่อง */
         .glass { 
             background: rgba(15, 23, 42, 0.75); 
             backdrop-filter: blur(15px); 
@@ -39,15 +39,14 @@
         }
         .theme-btn:hover { background: white; color: black; transform: scale(1.05); }
 
-        /* อนิเมชันการเข้าถึงหน้าเว็บ */
         nav { animation: fadeInDown 0.6s ease-out; }
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-    <!-- Navbar (Standardized) -->
+    <!-- Navbar (ต้องมี ID ตามที่ JS กำหนดไว้) -->
     <nav class="glass sticky top-0 z-[1001] flex justify-between items-center px-10 py-5">
-        <div class="text-2xl font-bold italic text-blue-400">Weather Forecast</div>
+        <div class="text-2xl font-bold italic text-blue-400">Weather.Forecast</div>
         <div class="hidden md:flex space-x-8 items-center" id="navbar-links">
             <a href="index.html" class="hover:text-blue-400 transition">Homepage</a>
             <a href="guide.html" class="hover:text-blue-400 transition">Guide</a>
@@ -58,7 +57,6 @@
     </nav>
 
     <div class="relative">
-        <!-- ปุ่มสลับโหมดแผนที่ขวาบน -->
         <button onclick="toggleMapTheme()" id="themeBtn" class="theme-btn shadow-2xl">
             <i class="fas fa-moon"></i> Dark Mode
         </button>
@@ -71,23 +69,20 @@
         let map = L.map('map').setView([13.75, 100.5], 6);
         let isDarkMode = false;
 
-        // Tiles สำหรับแผนที่ 2 โหมด
+        // เตรียม Tiles 2 รูปแบบ
         const lightTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-        const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; CartoDB'
-        });
-
-        // เริ่มต้นด้วย Light Mode
+        const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png');
+        
+        // เริ่มด้วยแผนที่สีปกติ
         lightTiles.addTo(map);
 
-        // เลเยอร์น้ำฝน (โปร่งแสง 50%)
+        // แสดงเลเยอร์ฝน
         const rainLayer = L.tileLayer(`https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${API_KEY}`, {
             opacity: 0.5,
             zIndex: 10
         });
         rainLayer.addTo(map);
 
-        // ฟังก์ชันสลับธีมแผนที่
         function toggleMapTheme() {
             const btn = document.getElementById('themeBtn');
             if (!isDarkMode) {
@@ -101,36 +96,38 @@
                 btn.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
                 isDarkMode = false;
             }
-            // ย้ายเลเยอร์ฝนมาไว้ข้างบนสุดเสมอ
             rainLayer.bringToFront();
         }
 
-        // ระบบตรวจสอบ Login (ทำให้เหมือนหน้าอื่น 100%)
-        window.onload = function() {
+        // --- ระบบเช็ค User และ Logout (เพิ่มมาเพื่อแก้ปัญหาที่คุณเจอ) ---
+        function checkLoginStatus() {
             const isLoggedIn = localStorage.getItem('isLoggedIn');
             const userName = localStorage.getItem('userName');
             const navMenu = document.getElementById('navbar-links');
             const signInLink = document.getElementById('login-nav-link');
 
             if (isLoggedIn === 'true' && signInLink) {
-                // เปลี่ยนเป็นชื่อ User และไอคอน
+                // เปลี่ยน Sign in เป็นชื่อ User
                 signInLink.innerHTML = `<i class="fas fa-user-circle mr-1"></i>${userName}`;
                 signInLink.href = "#";
                 signInLink.style.color = "#60a5fa";
-                signInLink.classList.remove('border-b-2'); // เคลียร์ขีดล่างของเมนูเดิมถ้ามี
+                signInLink.classList.remove('border-b-2'); // ลบเส้นใต้ออกเมื่อเป็น User
 
                 // สร้างปุ่ม Logout
                 const logoutBtn = document.createElement('a');
                 logoutBtn.innerHTML = `Logout`;
-                logoutBtn.className = "hover:text-red-400 cursor-pointer transition text-[10px] opacity-60 ml-4 uppercase";
+                logoutBtn.className = "hover:text-red-400 cursor-pointer transition text-[10px] opacity-60 ml-4 uppercase tracking-tighter";
                 
                 logoutBtn.onclick = function() {
-                    localStorage.clear();
-                    window.location.reload();
+                    localStorage.clear(); // ล้างข้อมูล Login
+                    window.location.href = "index.html"; // กลับหน้าแรก
                 };
                 navMenu.appendChild(logoutBtn);
             }
-        };
+        }
+
+        // เรียกทำงานทันทีที่หน้าเว็บโหลดเสร็จ
+        window.onload = checkLoginStatus;
     </script>
 </body>
 </html>
